@@ -10,6 +10,7 @@ const AuthContext = createContext({
 
 export const AuthContextProvider = ({children}) =>{
     const [user, setUser] = useState(null)
+    const [authReady, setAuthReady] = useState(false)
 
     useEffect(()=>{
         // ini namanya userFromNetlify buat perjelas aja, bisa kok pake user aja untuk parameter jadi misalnya parameter diganti 'user' nanti si
@@ -23,6 +24,12 @@ export const AuthContextProvider = ({children}) =>{
         netlifyIdentity.on('logout',()=>{
             setUser(null)
             console.log('logout event')
+        })
+
+        netlifyIdentity.on('init',(user)=>{
+            setUser(user);
+            setAuthReady(true)
+            console.log('init event')
         })
 
         // init netlify identity connection
